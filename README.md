@@ -321,7 +321,7 @@ apt install python3 -y && sudo apt install python3-pip &&  pip install colorama 
 pip3 install colorama
 sudo apt-get install python-pip -y  &&  apt-get install python3 -y && alias python=python3 && python -m pip install colorama && python -m pip install netifaces
 ```
-
+- اجرای اسکریپت
 ```
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Azumi67/Backhaul_script/refs/heads/main/backhaul.sh)"
 ```
