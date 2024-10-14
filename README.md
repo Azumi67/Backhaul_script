@@ -2,8 +2,10 @@
 نام پروژه : اسکریپت backhaul
 ---------------------------------------------------------------
 
+**نسخه v0.4.5 میباشد. بعدا اسکریپت هم اپدیت میشود**
+
 ![check](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/13de8d36-dcfe-498b-9d99-440049c0cf14)
-**امکانات**
+**امکانات**(نسخه v0.4.5)
 - ریورس تانل به صورت single یا multi
 - یک سرور ایران و ده سرور خارج
 - دارای ویرایش تمام سرور ها و کلاینت ها
@@ -216,7 +218,7 @@
   <img src="https://github.com/user-attachments/assets/e32035f4-2256-4403-82dd-cef85be4f3fa" alt="Image" />
 </p>
 
-- دقت نمایید که هر کانفیگ در سرور ایران در برابر کلاینت خارج میباشد. بدین صورت که اگر من 2 عدد کلاینت خارج دارم پس باید در سرور ایران، دو عدد کانفیگ داشته باشم
+- دقت نمایید که هر کانفیگ در سرور ایران برابر با کلاینت خارج میباشد. بدین صورت که اگر من 2 عدد کلاینت خارج دارم پس باید در سرور ایران، دو عدد کانفیگ داشته باشم
 <p align="right">
   <img src="https://github.com/user-attachments/assets/b1ced759-ccb1-47ff-b70c-fd9c0ff30db8" alt="Image" />
 </p>
@@ -308,4 +310,18 @@
   </details>
 </div>
 
-- در حال نوشتن ادامه اموزش
+------------------
+![R (a2)](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/716fd45e-635c-4796-b8cf-856024e5b2b2)
+**اسکریپت من**
+----------------
+
+```
+
+```
+
+---------------------------------------------
+![R23 (1)](https://github.com/Azumi67/FRP-V2ray-Loadbalance/assets/119934376/18d12405-d354-48ac-9084-fff98d61d91c)
+**سورس ها**
+
+
+![R (9)](https://github.com/Azumi67/FRP-V2ray-Loadbalance/assets/119934376/33388f7b-f1ab-4847-9e9b-e8b39d75deaa) [سورس  backhaul](https://github.com/Musixal/Backhaul)
