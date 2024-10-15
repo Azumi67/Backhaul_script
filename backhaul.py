@@ -66,16 +66,16 @@ def download_binary():
     url = ""
 
     if os_name == "linux" and arch == "x86_64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_linux_amd64.tar.gz"
+        url = "https://github.com/Musixal/Backhaul/releases/download/v0.5.1/backhaul_linux_amd64.tar.gz"
         file_name = "/tmp/backhaul_linux_amd64.tar.gz"
     elif os_name == "linux" and arch == "aarch64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_linux_arm64.tar.gz"
+        url = "https://github.com/Musixal/Backhaul/releases/download/v0.5.1/backhaul_darwin_arm64.tar.gz"
         file_name = "/tmp/backhaul_linux_arm64.tar.gz"
     elif os_name == "darwin" and arch == "x86_64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_darwin_amd64.tar.gz"
+        url = "https://github.com/Musixal/Backhaul/releases/download/v0.5.1/backhaul_darwin_amd64.tar.gz"
         file_name = "/tmp/backhaul_darwin_amd64.tar.gz"
     elif os_name == "darwin" and arch == "arm64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_darwin_arm64.tar.gz"
+        url = "https://github.com/Musixal/Backhaul/releases/download/v0.5.1/backhaul_darwin_arm64.tar.gz"
         file_name = "/tmp/backhaul_darwin_arm64.tar.gz"
     else:
         print("\033[91mOS or arch Unsupported\033[0m ")
@@ -149,6 +149,7 @@ def display_logo():
       \033[96m(___/    \___) \033[1;94m\_______)\033[1;92m(__________)\033[1;93m|___|\__/|___|\033[1;91m(__\_|_) \033[1;92mSCRIPT   Author: github.com/Azumi67  \033[1;96m                                                          
 """
     print(logo)
+
 def backhaul_menu():
     os.system("clear")
     while True:  
@@ -206,6 +207,7 @@ def backhaul_single():
     print("4  \033[92mWss\033[0m")
     print("5  \033[93mWs Mux\033[0m")
     print("6  \033[92mWss Mux\033[0m")
+    print("7  \033[93mUDP\033[0m")
     print("0. \033[94mback to the previous menu\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
@@ -226,6 +228,9 @@ def backhaul_single():
             
     elif choice == "6":
         backhaul_wssmux_single()
+
+    elif choice == "7":
+        backhaul_udp_menu()
             
     elif choice == "0":
         clear()
@@ -233,6 +238,189 @@ def backhaul_single():
         
     else:
         print("Invalid choice.")
+
+
+def backhaul_udp_menu():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul\033[96m UDP\033[93m Single Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[93mChoose what to do:\033[0m")
+    print("1  \033[93mIRAN Server\033[0m")
+    print("2  \033[92mKharej Client\033[0m")
+    print("0. \033[94mback to the previous menu\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
+    if choice == "1":
+        backhaul_iran_server_udpmenu()
+            
+    elif choice == "2":
+        backhaul_kharej_client_udpmenu()
+            
+    elif choice == "0":
+        clear()
+        backhaul_single()
+            
+    else:
+        print("Invalid choice.")
+
+def backhaul_iran_server_udpmenu():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Server \033[93m Single Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("1)\033[92m Port forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service()
+    enable_backhaul_reset_server()
+
+def backhaul_kharej_client_udpmenu():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,  
+        "token": input("\033[93mEnter the \033[92mtoken\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service()
+    enable_backhaul_reset_client()
+
 
 def backhaul_tcp_single():
     os.system("clear")
@@ -628,11 +816,6 @@ def backhaul_iran_server_tcpmenu():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -888,6 +1071,10 @@ def backhaul_kharej_client_tcpmuxmenu():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -2389,6 +2576,7 @@ def backhaul_edit_single():
     print("4  \033[92mEdit WSMux\033[0m")
     print("5  \033[93mEdit WSs\033[0m")
     print("6  \033[92mEdit WSsMux\033[0m")
+    print("7  \033[93mEdit UDP\033[0m")
     print("0. \033[94mback to the previous menu\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
@@ -2409,10 +2597,41 @@ def backhaul_edit_single():
             
     elif choice == "6":
         backhaul_edit_wssmuxsingle()
+
+    elif choice == "7":
+        backhaul_edit_udpsingle()
             
     elif choice == "0":
         clear()
         backhaul_editlocal()
+            
+    else:
+        print("Invalid choice.")
+
+def backhaul_edit_udpsingle():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul Single UDP\033[93m Edit Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[93mChoose what to do:\033[0m")
+    print("1  \033[93mIRAN Server\033[0m")
+    print("2  \033[92mKharej Client\033[0m")
+    print("0. \033[94mback to the previous menu\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
+    if choice == "1":
+        lines = read_config_server()
+        configws_single_server_menu(lines)
+            
+    elif choice == "2":
+        lines = read_config_client()
+        configws_single_client_menu(lines)
+            
+    elif choice == "0":
+        clear()
+        backhaul_edit_single()
             
     else:
         print("Invalid choice.")
@@ -3254,12 +3473,24 @@ def service_status(service_name):
 def transport_method(config_file):
     try:
         with open(config_file, "r") as file:
+            transport = None
             for line in file:
+                line = line.strip()
+
+                if "accept_udp = true" in line:
+                    return "UDP"
+                
                 if line.startswith("transport"):
-                    return line.split("=")[-1].strip().replace('"', '')
+                    transport = line.split("=")[-1].strip().replace('"', '')
+
+            if transport:
+                return transport
+
     except FileNotFoundError:
         return "\033[91mNot found\033[0m"
+    
     return "\033[91mUnknown\033[0m"
+
 
 def service_logs(service_name):
     print("\033[93mService Logs:\033[0m")
@@ -3287,6 +3518,7 @@ def backhaul_multi():
     print("4  \033[92mWss\033[0m")
     print("5  \033[93mWs Mux\033[0m")
     print("6  \033[92mWss Mux\033[0m")
+    print("7  \033[93mUDP\033[0m")
     print("0. \033[94mback to the previous menu\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
@@ -3307,6 +3539,9 @@ def backhaul_multi():
             
     elif choice == "6":
         backhaul_wssmux_multi()
+
+    elif choice == "7":
+        backhaul_udp_multi()
             
     elif choice == "0":
         clear()
@@ -3314,6 +3549,1742 @@ def backhaul_multi():
             
     else:
         print("Invalid choice.")
+
+def backhaul_udp_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul\033[96m UDP\033[93m multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[93mChoose what to do:\033[0m")
+    print("1  \033[93mIRAN Server Configs\033[0m")
+    print("2  \033[92mKharej Clients\033[0m")
+    print("0. \033[94mback to the previous menu\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
+    if choice == "1":
+        backhaul_iran_server_udp_multimenu()
+            
+    elif choice == "2":
+        backhaul_kharej_client_udp_multimenu()
+            
+    elif choice == "0":
+        clear()
+        backhaul_multi()
+            
+    else:
+        print("Invalid choice.")
+
+def backhaul_iran_server_udp_multimenu():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul\033[96m UDP\033[96m IRAN Server\033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m════════════════════════════════════════════════════\033[0m')
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[93mChoose what to do:\033[0m")
+    print("1  \033[93mIRAN \033[97mConfig [1]\033[0m")
+    print("2  \033[93mIRAN \033[97mConfig [2]\033[0m")
+    print("3  \033[92mIRAN \033[97mConfig [3]\033[0m")
+    print("4  \033[93mIRAN \033[97mConfig [4]\033[0m")
+    print("5  \033[93mIRAN \033[97mConfig [5]\033[0m")
+    print("6  \033[92mIRAN \033[97mConfig [6]\033[0m")
+    print("7  \033[93mIRAN \033[97mConfig [7]\033[0m")
+    print("8  \033[93mIRAN \033[97mConfig [8]\033[0m")
+    print("9  \033[92mIRAN \033[97mConfig [9]\033[0m")
+    print("10 \033[93mIRAN \033[97mConfig [10]\033[0m")
+    print("0. \033[94mback to the previous menu\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+    choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
+    if choice == "1":
+        backhaul_iran_server_udpmenu_multic1()
+            
+    elif choice == "2":
+        backhaul_iran_server_udpmenu_multic2()
+            
+    elif choice == "3":
+        backhaul_iran_server_udpmenu_multic3()
+            
+    elif choice == "4":
+        backhaul_iran_server_udpmenu_multic4()
+            
+    elif choice == "5":
+        backhaul_iran_server_udpmenu_multic5()
+            
+    elif choice == "6":
+        backhaul_iran_server_udpmenu_multic6()
+            
+    elif choice == "7":
+        backhaul_iran_server_udpmenu_multic7()
+            
+    elif choice == "8":
+        backhaul_iran_server_udpmenu_multic8()
+            
+    elif choice == "9":
+        backhaul_iran_server_udpmenu_multic9()
+            
+    elif choice == "10":
+        backhaul_iran_server_udpmenu_multic10()
+            
+    elif choice == "0":
+        clear()
+        backhaul_udp_multi()
+            
+    else:
+        print("Invalid choice.")
+
+def backhaul_kharej_client_udp_multimenu():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul\033[96m UDP\033[96m Kharej Clients\033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m════════════════════════════════════════════════════\033[0m')
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[93mChoose what to do:\033[0m")
+    print("1  \033[93mKharej \033[97mClient [1]\033[0m")
+    print("2  \033[93mKharej \033[97mClient [2]\033[0m")
+    print("3  \033[92mKharej \033[97mClient [3]\033[0m")
+    print("4  \033[93mKharej \033[97mClient [4]\033[0m")
+    print("5  \033[93mKharej \033[97mClient [5]\033[0m")
+    print("6  \033[92mKharej \033[97mClient [6]\033[0m")
+    print("7  \033[93mKharej \033[97mClient [7]\033[0m")
+    print("8  \033[93mKharej \033[97mClient [8]\033[0m")
+    print("9  \033[92mKharej \033[97mClient [9]\033[0m")
+    print("10 \033[93mKharej \033[97mClient [10]\033[0m")
+    print("0. \033[94mback to the previous menu\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+    choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
+    if choice == "1":
+        backhaul_kharej1_client_udpmenu_multi()
+            
+    elif choice == "2":
+        backhaul_kharej2_client_udpmenu_multi()
+            
+    elif choice == "3":
+        backhaul_kharej3_client_udpmenu_multi()
+            
+    elif choice == "4":
+        backhaul_kharej4_client_udpmenu_multi()
+            
+    elif choice == "5":
+        backhaul_kharej5_client_udpmenu_multi()
+            
+    elif choice == "6":
+        backhaul_kharej6_client_udpmenu_multi()
+            
+    elif choice == "7":
+        backhaul_kharej7_client_udpmenu_multi()
+            
+    elif choice == "8":
+        backhaul_kharej8_client_udpmenu_multi()
+            
+    elif choice == "9":
+        backhaul_kharej9_client_udpmenu_multi()
+            
+    elif choice == "10":
+        backhaul_kharej10_client_udpmenu_multi()
+            
+    elif choice == "0":
+        clear()
+        backhaul_udp_multi()
+            
+    else:
+        print("Invalid choice.")
+
+def backhaul_iran_server_udpmenu_multic1():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [1] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [1]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config1.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [1]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server1.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service1()
+    enable_backhaul_reset_server1()
+
+#2
+
+def backhaul_iran_server_udpmenu_multic2():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [2] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [2]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config2.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [2]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server2.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service2()
+    enable_backhaul_reset_server2()
+
+#3
+
+def backhaul_iran_server_udpmenu_multic3():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [3] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [3]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config3.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [3]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server3.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service3()
+    enable_backhaul_reset_server3()
+
+#4
+
+def backhaul_iran_server_udpmenu_multic4():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [4] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [4]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config4.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [4]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server4.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service4()
+    enable_backhaul_reset_server4()
+
+#5
+
+def backhaul_iran_server_udpmenu_multic5():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [5] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [5]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config5.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [5]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server5.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service5()
+    enable_backhaul_reset_server5()
+
+#6
+
+def backhaul_iran_server_udpmenu_multic6():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [6] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [6]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config6.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [6]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server6.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service6()
+    enable_backhaul_reset_server6()
+
+#7
+
+def backhaul_iran_server_udpmenu_multic7():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [7] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [7]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config7.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [7]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server7.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service7()
+    enable_backhaul_reset_server7()
+
+#8
+
+def backhaul_iran_server_udpmenu_multic8():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [8] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [8]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config8.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [8]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server8.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service8()
+    enable_backhaul_reset_server8()
+
+#9
+
+def backhaul_iran_server_udpmenu_multic9():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [9] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [9]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config9.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [9]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server9.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service9()
+    enable_backhaul_reset_server9()
+
+#10
+
+def backhaul_iran_server_udpmenu_multic10():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mIRAN Config [10] \033[93m Multi Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+    
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+    
+    print("\033[93m───────────────────────────────────────\033[0m")
+    port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [9]\033[93m: \033[0m").strip()
+    if port.isdigit():
+        bind_addr = f"0.0.0.0:{port}"
+    else:
+        bind_addr = "0.0.0.0:8443"
+
+    sniffer_enabled = input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y"
+    sniffer_log = "/etc/backhaul_config10.json" if sniffer_enabled else ""
+
+    config = {
+        "bind_addr": bind_addr,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [10]\033[93m: \033[0m").strip(),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
+        "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
+        "sniffer": sniffer_enabled,
+        "sniffer_log": sniffer_log,
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
+        "log_level": "info",
+    }
+
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+    print("1)\033[92m TCP forward\033[0m")
+    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    
+    ports = []
+    choice = int(input("Choose an option (1-4): "))
+
+    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
+    for i in range(1, count + 1):
+        if choice == 1:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+            ports.append(f"{local_port}={remote_port}")
+        elif choice == 2:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_port}")
+        elif choice == 3:
+            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+            ports.append(f"{local_port}={remote_ip}:{remote_port}")
+        elif choice == 4:
+            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    config["ports"] = ports
+
+    config_path = "/usr/local/bin/backhaul/server10.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[server]\n")
+        for key, value in config.items():
+            if key == "ports":
+                config_file.write("ports = [\n")
+                for port in value:
+                    config_file.write(f'    "{port}",\n')
+                config_file.write("]\n")
+            else:
+                if isinstance(value, bool):
+                    config_file.write(f'{key} = {"true" if value else "false"}\n')
+                elif isinstance(value, int):
+                    config_file.write(f'{key} = {value}\n')
+                else:
+                    config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mConfig file created at {config_path}\033[0m")
+    create_singleserver_service10()
+    enable_backhaul_reset_server10()
+
+def backhaul_kharej1_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [1] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [1]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [1]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client1.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client1.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service1()
+    enable_backhaul_reset_client1()
+
+#2
+
+def backhaul_kharej2_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [2] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [2]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [2]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client2.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client2.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service2()
+    enable_backhaul_reset_client2()
+
+#3
+
+def backhaul_kharej3_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [3] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [3]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [3]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client3.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client3.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service3()
+    enable_backhaul_reset_client3()
+
+#4
+
+def backhaul_kharej4_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [4] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [4]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [4]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client4.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client4.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service4()
+    enable_backhaul_reset_client4()
+
+#5
+def backhaul_kharej5_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [5] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [5]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [5]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client5.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client5.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service5()
+    enable_backhaul_reset_client5()
+
+#6
+
+def backhaul_kharej6_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [6] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [6]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [6]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client6.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client6.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service6()
+    enable_backhaul_reset_client6()
+
+#7
+
+def backhaul_kharej7_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [7] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [7]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [7]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client7.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client7.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service7()
+    enable_backhaul_reset_client7()
+
+#8
+def backhaul_kharej8_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [8] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [8]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [8]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client8.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client8.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service8()
+    enable_backhaul_reset_client8()
+
+#9
+def backhaul_kharej9_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [9] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [9]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [9]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client9.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client9.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service9()
+    enable_backhaul_reset_client9()
+
+#10
+def backhaul_kharej10_client_udpmenu_multi():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul \033[92mKharej Client [10] \033[93mSingle Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    backhaul_directory = "/usr/local/bin/backhaul"
+    if os.path.exists(backhaul_directory):
+        print(f"\033[93mbackhaul exists, skipping\033[0m")
+    else:
+        install_prerequisites()
+        download_binary()
+
+    print("\033[93m───────────────────────────────────────\033[0m")
+
+    remote_addr = input("\033[93mEnter\033[92m IRAN \033[97m(IPv4/IPv6)\033[93m: \033[0m").strip()
+    tunnel_port = input("\033[93mEnter \033[92mTunnel Port \033[97mConfig [10]\033[93m : \033[0m").strip()
+    remote_addr_with_port = f"{remote_addr}:{tunnel_port}"
+
+    config = {
+        "remote_addr": remote_addr_with_port,
+        "transport": "tcp",
+        "accept_udp": True,
+        "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [10]\033[93m: \033[0m").strip(),
+        "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
+        "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
+        "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
+        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
+        "sniffer_log": "/etc/backhaul_client10.json",
+        "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
+        "log_level": "info",
+    }
+
+    config_path = "/usr/local/bin/backhaul/client10.toml"
+    with open(config_path, 'w') as config_file:
+        config_file.write("[client]\n")
+        for key, value in config.items():
+            if key == "accept_udp":
+                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
+            elif isinstance(value, bool):
+                config_file.write(f'{key} = {"true" if value else "false"}\n')
+            elif isinstance(value, int):
+                config_file.write(f'{key} = {value}\n')
+            else:
+                config_file.write(f'{key} = "{value}"\n')
+
+    display_checkmark(f"\033[92mClient config file created at {config_path}\033[0m")
+    create_singleclient_service10()
+    enable_backhaul_reset_client10()
 
 def backhaul_tcp_multi():
     os.system("clear")
@@ -3595,11 +5566,6 @@ def backhaul_iran_server_tcpmenu_multic1():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -3804,11 +5770,6 @@ def backhaul_iran_server_tcpmenu_multic2():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -4014,11 +5975,6 @@ def backhaul_iran_server_tcpmenu_multic3():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -4222,11 +6178,6 @@ def backhaul_iran_server_tcpmenu_multic4():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -4430,11 +6381,6 @@ def backhaul_iran_server_tcpmenu_multic5():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -4638,11 +6584,6 @@ def backhaul_iran_server_tcpmenu_multic6():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -4846,11 +6787,6 @@ def backhaul_iran_server_tcpmenu_multic7():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -5054,11 +6990,6 @@ def backhaul_iran_server_tcpmenu_multic8():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -5262,11 +7193,6 @@ def backhaul_iran_server_tcpmenu_multic9():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -5470,11 +7396,6 @@ def backhaul_iran_server_tcpmenu_multic10():
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
-        "mux_con": int(input("\033[93mEnter the \033[92mmux concurrency \033[97m(default 8)\033[93m: \033[0m") or 8),
-        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
-        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
-        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
-        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": sniffer_enabled,
         "sniffer_log": sniffer_log,
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
@@ -8320,6 +10241,10 @@ def backhaul_kharej1_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client1.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8372,6 +10297,10 @@ def backhaul_kharej2_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client2.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8424,6 +10353,10 @@ def backhaul_kharej3_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client3.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8476,6 +10409,10 @@ def backhaul_kharej4_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client4.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8528,6 +10465,10 @@ def backhaul_kharej5_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client5.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8580,6 +10521,10 @@ def backhaul_kharej6_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client6.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8632,6 +10577,10 @@ def backhaul_kharej7_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client7.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8684,6 +10633,10 @@ def backhaul_kharej8_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client8.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8736,6 +10689,10 @@ def backhaul_kharej9_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client9.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -8788,6 +10745,10 @@ def backhaul_kharej10_client_tcpmuxmenu_multi():
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
         "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
+        "mux_version": int(input("\033[93mEnter the \033[92mmux version \033[97m(1 or 2, default 1)\033[93m: \033[0m") or 1),
+        "mux_framesize": int(input("\033[93mEnter the \033[92mmux frame size\033[97m (default 32768)\033[93m: \033[0m") or 32768),
+        "mux_recievebuffer": int(input("\033[93mEnter the \033[92mmux receive buffer size\033[97m (default 4194304)\033[93m: \033[0m") or 4194304),
+        "mux_streambuffer": int(input("\033[93mEnter the \033[92mmux stream buffer size \033[97m(default 65536)\033[93m: \033[0m") or 65536),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client10.json",
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("\033[93mEnter interface port:\033[0m ")),
@@ -15816,6 +17777,7 @@ def backhaul_edit_multi():
     print("4  \033[92mEdit WSMux\033[0m")
     print("5  \033[93mEdit WSs\033[0m")
     print("6  \033[92mEdit WSsMux\033[0m")
+    print("7  \033[93mEdit UDP\033[0m")
     print("0. \033[94mback to the previous menu\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
@@ -15836,10 +17798,175 @@ def backhaul_edit_multi():
             
     elif choice == "6":
         backhaul_edit_wssmuxmulti()
+    
+    elif choice == "7":
+        backhaul_edit_udpmulti()
             
     elif choice == "0":
         clear()
         backhaul_editlocal()
+            
+    else:
+        print("Invalid choice.")
+
+def backhaul_edit_udpmulti():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul\033[96m UDP\033[93m Edit Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════\033[0m')
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[93mChoose what to do:\033[0m")
+    print("1  \033[93mIRAN Server \033[97mConfigs\033[0m")
+    print("2  \033[92mKharej Clients\033[0m")
+    print("0. \033[94mback to the previous menu\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
+    if choice == "1":
+        backhaul_iran_server_udpmenu_editmulti()
+            
+    elif choice == "2":
+        backhaul_kharej_client_udpmenu_editmulti()
+            
+    elif choice == "0":
+        clear()
+        backhaul_edit_multi()
+            
+    else:
+        print("Invalid choice.")
+
+def backhaul_iran_server_udpmenu_editmulti():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul\033[96m UDP\033[96m IRAN Server\033[93m Edit Menu\033[0m")
+    print('\033[92m "-"\033[93m════════════════════════════════════════════════════\033[0m')
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[93mChoose what to do:\033[0m")
+    print("1  \033[93mIRAN \033[97mConfig [1]\033[0m")
+    print("2  \033[93mIRAN \033[97mConfig [2]\033[0m")
+    print("3  \033[92mIRAN \033[97mConfig [3]\033[0m")
+    print("4  \033[93mIRAN \033[97mConfig [4]\033[0m")
+    print("5  \033[93mIRAN \033[97mConfig [5]\033[0m")
+    print("6  \033[92mIRAN \033[97mConfig [6]\033[0m")
+    print("7  \033[93mIRAN \033[97mConfig [7]\033[0m")
+    print("8  \033[93mIRAN \033[97mConfig [8]\033[0m")
+    print("9  \033[92mIRAN \033[97mConfig [9]\033[0m")
+    print("10 \033[93mIRAN \033[97mConfig [10]\033[0m")
+    print("0. \033[94mback to the previous menu\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
+    if choice == "1":
+        lines = read_config_server1()
+        configws_multi_server1_menu(lines)
+            
+    elif choice == "2":
+        lines = read_config_server2()
+        configws_multi_server2_menu(lines)
+            
+    elif choice == "3":
+        lines = read_config_server3()
+        configws_multi_server3_menu(lines)
+            
+    elif choice == "4":
+        lines = read_config_server4()
+        configws_multi_server4_menu(lines)
+            
+    elif choice == "5":
+        lines = read_config_server5()
+        configws_multi_server5_menu(lines)
+            
+    elif choice == "6":
+        lines = read_config_server6()
+        configws_multi_server6_menu(lines)
+            
+    elif choice == "7":
+        lines = read_config_server7()
+        configws_multi_server7_menu(lines)
+            
+    elif choice == "8":
+        lines = read_config_server8()
+        configws_multi_server8_menu(lines)
+            
+    elif choice == "9":
+        lines = read_config_server9()
+        configws_multi_server9_menu(lines)
+            
+    elif choice == "10":
+        lines = read_config_server10()
+        configws_multi_server10_menu(lines)
+            
+    elif choice == "0":
+        clear()
+        backhaul_edit_tcpmulti()
+            
+    else:
+        print("Invalid choice.")
+#inja
+def backhaul_kharej_client_udpmenu_editmulti():
+    os.system("clear")
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mBackhaul\033[96m UDP\033[96m Kharej Clients\033[93m Edit Menu\033[0m")
+    print('\033[92m "-"\033[93m════════════════════════════════════════════════════\033[0m')
+    print("\033[93m╭───────────────────────────────────────╮\033[0m")
+    print("\033[93mChoose what to do:\033[0m")
+    print("1  \033[93mKharej \033[97mClient [1]\033[0m")
+    print("2  \033[93mKharej \033[97mClient [2]\033[0m")
+    print("3  \033[92mKharej \033[97mClient [3]\033[0m")
+    print("4  \033[93mKharej \033[97mClient [4]\033[0m")
+    print("5  \033[93mKharej \033[97mClient [5]\033[0m")
+    print("6  \033[92mKharej \033[97mClient [6]\033[0m")
+    print("7  \033[93mKharej \033[97mClient [7]\033[0m")
+    print("8  \033[93mKharej \033[97mClient [8]\033[0m")
+    print("9  \033[92mKharej \033[97mClient [9]\033[0m")
+    print("10 \033[93mKharej \033[97mClient [10]\033[0m")
+    print("0. \033[94mback to the previous menu\033[0m")
+    print("\033[93m╰───────────────────────────────────────╯\033[0m")
+    choice = input("\033[38;5;205mEnter your choice Please: \033[0m")
+    if choice == "1":
+        lines = read_config_client1()
+        configws_multi_client1_menu(lines)
+            
+    elif choice == "2":
+        lines = read_config_client2()
+        configws_multi_client2_menu(lines)
+            
+    elif choice == "3":
+        lines = read_config_client3()
+        configws_multi_client3_menu(lines)
+            
+    elif choice == "4":
+        lines = read_config_client4()
+        configws_multi_client4_menu(lines)
+            
+    elif choice == "5":
+        lines = read_config_client5()
+        configws_multi_client5_menu(lines)
+            
+    elif choice == "6":
+        lines = read_config_client6()
+        configws_multi_client6_menu(lines)
+            
+    elif choice == "7":
+        lines = read_config_client7()
+        configws_multi_client7_menu(lines)
+            
+    elif choice == "8":
+        lines = read_config_client8()
+        configws_multi_client8_menu(lines)
+            
+    elif choice == "9":
+        lines = read_config_client9()
+        configws_multi_client9_menu(lines)
+            
+    elif choice == "10":
+        lines = read_config_client10()
+        configws_multi_client10_menu(lines)
+            
+    elif choice == "0":
+        clear()
+        backhaul_edit_tcpmulti()
             
     else:
         print("Invalid choice.")
