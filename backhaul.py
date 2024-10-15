@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-# 6to4 Configuration Script
+# backhaul Configuration Script
 # Author: github.com/Azumi67
-# This is for educational use and my own learning, please provide me with feedback if possible
-# This script is designed to simplify the configuration of 6to4 tunnels.
-#
+# This script is designed to simplify the configuration of backhaul tunnel.
 # Supported operating systems: Ubuntu 20, Debian 12, Ubuntu 22, Ubuntu 22
 
 import platform
