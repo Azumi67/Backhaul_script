@@ -389,7 +389,7 @@
 
   </details>
 </div>
-- اموزش udp مولتی هم بعدا اضافه خواهد شد
+
 ------------------
 ![R (a2)](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/716fd45e-635c-4796-b8cf-856024e5b2b2)
 **اسکریپت من**
