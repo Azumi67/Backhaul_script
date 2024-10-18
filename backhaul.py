@@ -104,7 +104,6 @@ def download_binary():
             tar.extractall(path=target_dir)
 
     print("\033[92mBinary downloaded and extracted\033[0m")
-
 def display_logo():
     colorama.init()  
     logo = """ 
@@ -357,6 +356,7 @@ def backhaul_iran_server_udpmenu():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("1)\033[92m Listen on all ports in the range\033[0m")
@@ -901,6 +901,7 @@ def backhaul_iran_server_tcpmenu():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("1)\033[92m Listen on all ports in the range\033[0m")
@@ -1089,6 +1090,7 @@ def backhaul_iran_server_tcpmuxmenu():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("1)\033[92m Listen on all ports in the range\033[0m")
@@ -1274,6 +1276,7 @@ def backhaul_iran_server_wsmenu():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("1)\033[92m Listen on all ports in the range\033[0m")
@@ -1497,6 +1500,7 @@ def backhaul_iran_server_wssmenu():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("1)\033[92m Listen on all ports in the range\033[0m")
@@ -1683,6 +1687,7 @@ def backhaul_iran_server_wsmuxmenu():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("1)\033[92m Listen on all ports in the range\033[0m")
@@ -1875,6 +1880,7 @@ def backhaul_iran_server_wssmuxmenu():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("1)\033[92m Listen on all ports in the range\033[0m")
@@ -4012,12 +4018,15 @@ def backhaul_iran_server_udpmenu_multic1():
         "web_port": int(input("\033[93mEnable \033[92mweb interface\033[93m (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y" and input("Enter web port: ") or "0"),
         "log_level": "info",
     }
-
+    
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
     print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
     print("1)\033[92m Regular Port Forward\033[0m")
-    print("2)\033[92m Port Range Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
     forward_type = int(input("Choose a forward type (1-2): "))
@@ -4063,6 +4072,7 @@ def backhaul_iran_server_udpmenu_multic1():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
@@ -4197,6 +4207,7 @@ def backhaul_iran_server_udpmenu_multic2():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
@@ -4331,6 +4342,7 @@ def backhaul_iran_server_udpmenu_multic3():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
@@ -4465,6 +4477,7 @@ def backhaul_iran_server_udpmenu_multic4():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
@@ -4599,6 +4612,7 @@ def backhaul_iran_server_udpmenu_multic5():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
@@ -4733,6 +4747,7 @@ def backhaul_iran_server_udpmenu_multic6():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
@@ -4867,6 +4882,7 @@ def backhaul_iran_server_udpmenu_multic7():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
@@ -5001,6 +5017,7 @@ def backhaul_iran_server_udpmenu_multic8():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
@@ -5135,6 +5152,7 @@ def backhaul_iran_server_udpmenu_multic9():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
@@ -5269,6 +5287,7 @@ def backhaul_iran_server_udpmenu_multic10():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
@@ -6113,11 +6132,14 @@ def backhaul_iran_server_tcpmenu_multic1():
         "log_level": "info",
     }
 
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
     print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
     print("1)\033[92m Regular Port Forward\033[0m")
-    print("2)\033[92m Port Range Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
     forward_type = int(input("Choose a forward type (1-2): "))
@@ -6163,6 +6185,7 @@ def backhaul_iran_server_tcpmenu_multic1():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
@@ -6399,6 +6422,7 @@ def backhaul_iran_server_tcpmenu_multic2():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
@@ -6636,6 +6660,7 @@ def backhaul_iran_server_tcpmenu_multic3():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
@@ -6871,6 +6896,7 @@ def backhaul_iran_server_tcpmenu_multic4():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
@@ -7106,6 +7132,7 @@ def backhaul_iran_server_tcpmenu_multic5():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
@@ -7341,6 +7368,7 @@ def backhaul_iran_server_tcpmenu_multic6():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
@@ -7576,6 +7604,7 @@ def backhaul_iran_server_tcpmenu_multic7():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
@@ -7811,6 +7840,7 @@ def backhaul_iran_server_tcpmenu_multic8():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
@@ -8046,6 +8076,7 @@ def backhaul_iran_server_tcpmenu_multic9():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
@@ -8281,6 +8312,7 @@ def backhaul_iran_server_tcpmenu_multic10():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
@@ -10056,11 +10088,14 @@ def backhaul_iran_server_tcpmuxmenu_multic1():
         "log_level": "info",
     }
 
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
     print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
     print("1)\033[92m Regular Port Forward\033[0m")
-    print("2)\033[92m Port Range Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
     forward_type = int(input("Choose a forward type (1-2): "))
@@ -10106,6 +10141,7 @@ def backhaul_iran_server_tcpmuxmenu_multic1():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
@@ -10245,6 +10281,7 @@ def backhaul_iran_server_tcpmuxmenu_multic2():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
@@ -10384,6 +10421,7 @@ def backhaul_iran_server_tcpmuxmenu_multic3():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
@@ -10523,6 +10561,7 @@ def backhaul_iran_server_tcpmuxmenu_multic4():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
@@ -10662,6 +10701,7 @@ def backhaul_iran_server_tcpmuxmenu_multic5():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
@@ -10801,6 +10841,7 @@ def backhaul_iran_server_tcpmuxmenu_multic6():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
@@ -10940,6 +10981,7 @@ def backhaul_iran_server_tcpmuxmenu_multic7():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
@@ -11079,6 +11121,7 @@ def backhaul_iran_server_tcpmuxmenu_multic8():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
@@ -11218,6 +11261,7 @@ def backhaul_iran_server_tcpmuxmenu_multic9():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
@@ -11357,6 +11401,7 @@ def backhaul_iran_server_tcpmuxmenu_multic10():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
@@ -12144,11 +12189,14 @@ def backhaul_iran_server_wsmenu_multic1():
         "log_level": "info",
     }
 
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
     print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
     print("1)\033[92m Regular Port Forward\033[0m")
-    print("2)\033[92m Port Range Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
     forward_type = int(input("Choose a forward type (1-2): "))
@@ -12194,6 +12242,7 @@ def backhaul_iran_server_wsmenu_multic1():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
@@ -12328,6 +12377,7 @@ def backhaul_iran_server_wsmenu_multic2():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
@@ -12462,6 +12512,7 @@ def backhaul_iran_server_wsmenu_multic3():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
@@ -12596,6 +12647,7 @@ def backhaul_iran_server_wsmenu_multic4():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
@@ -12730,6 +12782,7 @@ def backhaul_iran_server_wsmenu_multic5():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
@@ -12864,6 +12917,7 @@ def backhaul_iran_server_wsmenu_multic6():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
@@ -12998,6 +13052,7 @@ def backhaul_iran_server_wsmenu_multic7():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
@@ -13132,6 +13187,7 @@ def backhaul_iran_server_wsmenu_multic8():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
@@ -13266,6 +13322,7 @@ def backhaul_iran_server_wsmenu_multic9():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
@@ -13400,6 +13457,7 @@ def backhaul_iran_server_wsmenu_multic10():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
@@ -14151,11 +14209,14 @@ def backhaul_iran_server_wsmuxmenu_multic1():
         "log_level": "info",
     }
 
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
     print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
     print("1)\033[92m Regular Port Forward\033[0m")
-    print("2)\033[92m Port Range Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
     forward_type = int(input("Choose a forward type (1-2): "))
@@ -14201,6 +14262,7 @@ def backhaul_iran_server_wsmuxmenu_multic1():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
@@ -14340,6 +14402,7 @@ def backhaul_iran_server_wsmuxmenu_multic2():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
@@ -14479,6 +14542,7 @@ def backhaul_iran_server_wsmuxmenu_multic3():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
@@ -14618,6 +14682,7 @@ def backhaul_iran_server_wsmuxmenu_multic4():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
@@ -14757,6 +14822,7 @@ def backhaul_iran_server_wsmuxmenu_multic5():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
@@ -14896,6 +14962,7 @@ def backhaul_iran_server_wsmuxmenu_multic6():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
@@ -15035,6 +15102,7 @@ def backhaul_iran_server_wsmuxmenu_multic7():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
@@ -15174,6 +15242,7 @@ def backhaul_iran_server_wsmuxmenu_multic8():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
@@ -15313,6 +15382,7 @@ def backhaul_iran_server_wsmuxmenu_multic9():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
@@ -15452,6 +15522,7 @@ def backhaul_iran_server_wsmuxmenu_multic10():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
@@ -16246,11 +16317,14 @@ def backhaul_iran_server_wssmenu_multic1():
         "log_level": "info",
     }
 
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
     print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
     print("1)\033[92m Regular Port Forward\033[0m")
-    print("2)\033[92m Port Range Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
     forward_type = int(input("Choose a forward type (1-2): "))
@@ -16296,6 +16370,7 @@ def backhaul_iran_server_wssmenu_multic1():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
@@ -16436,6 +16511,7 @@ def backhaul_iran_server_wssmenu_multic2():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
@@ -16576,6 +16652,7 @@ def backhaul_iran_server_wssmenu_multic3():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
@@ -16716,6 +16793,7 @@ def backhaul_iran_server_wssmenu_multic4():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
@@ -16856,6 +16934,7 @@ def backhaul_iran_server_wssmenu_multic5():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
@@ -16996,6 +17075,7 @@ def backhaul_iran_server_wssmenu_multic6():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
@@ -17136,6 +17216,7 @@ def backhaul_iran_server_wssmenu_multic7():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
@@ -17276,6 +17357,7 @@ def backhaul_iran_server_wssmenu_multic8():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
@@ -17416,6 +17498,7 @@ def backhaul_iran_server_wssmenu_multic9():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
@@ -17556,6 +17639,7 @@ def backhaul_iran_server_wssmenu_multic10():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
@@ -18314,11 +18398,14 @@ def backhaul_iran_server_wssmuxmenu_multic1():
         "log_level": "info",
     }
 
+    print("\033[92m ^ ^\033[0m")
+    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
     print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
     print("1)\033[92m Regular Port Forward\033[0m")
-    print("2)\033[92m Port Range Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
     forward_type = int(input("Choose a forward type (1-2): "))
@@ -18364,6 +18451,7 @@ def backhaul_iran_server_wssmuxmenu_multic1():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
@@ -18509,6 +18597,7 @@ def backhaul_iran_server_wssmuxmenu_multic2():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
@@ -18654,6 +18743,7 @@ def backhaul_iran_server_wssmuxmenu_multic3():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
@@ -18799,6 +18889,7 @@ def backhaul_iran_server_wssmuxmenu_multic4():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
@@ -18944,6 +19035,7 @@ def backhaul_iran_server_wssmuxmenu_multic5():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
@@ -19089,6 +19181,7 @@ def backhaul_iran_server_wssmuxmenu_multic6():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
@@ -19234,6 +19327,7 @@ def backhaul_iran_server_wssmuxmenu_multic7():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
@@ -19379,6 +19473,7 @@ def backhaul_iran_server_wssmuxmenu_multic8():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
@@ -19524,6 +19619,7 @@ def backhaul_iran_server_wssmuxmenu_multic9():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
@@ -19669,6 +19765,7 @@ def backhaul_iran_server_wssmuxmenu_multic10():
                 ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
 
     elif forward_type == 2:
+        print("\033[93m───────────────────────────────────────\033[0m")
         print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
         print("\033[93m╭───────────────────────────────────────╮\033[0m")
         print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
