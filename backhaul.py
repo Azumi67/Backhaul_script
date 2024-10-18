@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-# backhaul Configuration Script
+# 6to4 Configuration Script
 # Author: github.com/Azumi67
-# This script is designed to simplify the configuration of backhaul tunnel.
+# This is for educational use and my own learning, please provide me with feedback if possible
+# This script is designed to simplify the configuration of 6to4 tunnels.
+#
 # Supported operating systems: Ubuntu 20, Debian 12, Ubuntu 22, Ubuntu 22
 
 import platform
@@ -64,16 +66,16 @@ def download_binary():
     url = ""
 
     if os_name == "linux" and arch == "x86_64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.5.1/backhaul_linux_amd64.tar.gz"
+        url = "https://github.com/Musixal/Backhaul/releases/download/v0.6.1/backhaul_linux_amd64.tar.gz"
         file_name = "/tmp/backhaul_linux_amd64.tar.gz"
     elif os_name == "linux" and arch == "aarch64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.5.1/backhaul_darwin_arm64.tar.gz"
+        url = "https://github.com/Musixal/Backhaul/releases/download/v0.6.1/backhaul_linux_arm64.tar.gz"
         file_name = "/tmp/backhaul_linux_arm64.tar.gz"
     elif os_name == "darwin" and arch == "x86_64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.5.1/backhaul_darwin_amd64.tar.gz"
+        url = "https://github.com/Musixal/Backhaul/releases/download/v0.6.1/backhaul_darwin_amd64.tar.gz"
         file_name = "/tmp/backhaul_darwin_amd64.tar.gz"
     elif os_name == "darwin" and arch == "arm64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.5.1/backhaul_darwin_arm64.tar.gz"
+        url = "https://github.com/Musixal/Backhaul/releases/download/v0.6.1/backhaul_darwin_arm64.tar.gz"
         file_name = "/tmp/backhaul_darwin_arm64.tar.gz"
     else:
         print("\033[91mOS or arch Unsupported\033[0m ")
@@ -143,7 +145,7 @@ def display_logo():
       \033[96m    /    \   \033[1;94m \___/   :)\033[1;92m|   (  ) : |\033[1;93m \   \  //   | \033[1;91m||  |   
       \033[96m   /' /\  \   \033[1;94m  /  ___/ \033[1;92m(:  |  | . )\033[1;93m /\   \/.    |\033[1;91m |:  |   
      \033[96m   //  __'  \  \033[1;94m //  \__  \033[1;92m \  \__/  / \033[1;93m|: \.        | \033[1;91m|.  |   
-      \033[96m  /  /  \   \ \033[1;94m(:   / "\ \033[1;92m /\  __  /\ \033[1;93m|.  \    /:  |\033[1;91m /\  |\  \033[1;97mBackhaul Author: https://github.com/Musixal/Backhaul
+      \033[96m  /  /  \   \ \033[1;94m(:   / "\ \033[1;92m /\  __  /\ \033[1;93m|.  \    /:  |\033[1;91m /\  |\  \033[1;94mBackhaul Author: https://github.com/Musixal
       \033[96m(___/    \___) \033[1;94m\_______)\033[1;92m(__________)\033[1;93m|___|\__/|___|\033[1;91m(__\_|_) \033[1;92mSCRIPT   Author: github.com/Azumi67  \033[1;96m                                                          
 """
     print(logo)
@@ -264,6 +266,11 @@ def backhaul_udp_menu():
     else:
         print("Invalid choice.")
 
+
+def display_checkmark(message):
+    print(message)
+
+
 def backhaul_iran_server_udpmenu():
     os.system("clear")
     print("\033[92m ^ ^\033[0m")
@@ -278,7 +285,7 @@ def backhaul_iran_server_udpmenu():
     else:
         install_prerequisites()
         download_binary()
-    
+
     print("\033[93m───────────────────────────────────────\033[0m")
     port = input("\033[93mEnter \033[92mTunnel Port\033[93m: \033[0m").strip()
     if port.isdigit():
@@ -291,11 +298,9 @@ def backhaul_iran_server_udpmenu():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -308,39 +313,69 @@ def backhaul_iran_server_udpmenu():
     print("\033[92m(\033[91mO,O\033[92m)\033[0m")
     print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
     print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Port forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -365,6 +400,8 @@ def backhaul_iran_server_udpmenu():
     create_singleserver_service()
     enable_backhaul_reset_server()
 
+
+
 def backhaul_kharej_client_udpmenu():
     os.system("clear")
     print("\033[92m ^ ^\033[0m")
@@ -388,13 +425,11 @@ def backhaul_kharej_client_udpmenu():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,  
+        "transport": "udp", 
         "token": input("\033[93mEnter the \033[92mtoken\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul.json",
@@ -406,9 +441,7 @@ def backhaul_kharej_client_udpmenu():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -824,39 +857,69 @@ def backhaul_iran_server_tcpmenu():
     print("\033[92m(\033[91mO,O\033[92m)\033[0m")
     print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
     print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Port forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -982,39 +1045,69 @@ def backhaul_iran_server_tcpmuxmenu():
     print("\033[92m(\033[91mO,O\033[92m)\033[0m")
     print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
     print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Port forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -1137,39 +1230,69 @@ def backhaul_iran_server_wsmenu():
     print("\033[92m(\033[91mO,O\033[92m)\033[0m")
     print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
     print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Port forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -1330,39 +1453,69 @@ def backhaul_iran_server_wssmenu():
     print("\033[92m(\033[91mO,O\033[92m)\033[0m")
     print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
     print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Port forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -1486,39 +1639,69 @@ def backhaul_iran_server_wsmuxmenu():
     print("\033[92m(\033[91mO,O\033[92m)\033[0m")
     print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
     print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Port forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -1648,39 +1831,69 @@ def backhaul_iran_server_wssmuxmenu():
     print("\033[92m(\033[91mO,O\033[92m)\033[0m")
     print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
     print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[93m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Port forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -2863,6 +3076,7 @@ def edit_numeric(lines, key, new_value):
             lines[i] = f'{key} = {new_value}\n'
     return lines
 
+
 def edit_ports(lines):
     ports_section = False
     ports_index_start = -1
@@ -2879,26 +3093,100 @@ def edit_ports(lines):
 
     if ports_index_start != -1 and ports_index_end != -1:
         ports = lines[ports_index_start + 1:ports_index_end]
+
     print("\033[93m───────────────────────────────────────\033[0m")
     print("\033[92mCurrent Ports Configuration:\033[0m")
     print("\033[93m───────────────────────────────────────\033[0m")
     for i, port in enumerate(ports):
         print(f"{i + 1}) {port.strip()}")
 
-    choice = input("\n\033[93mEnter the \033[92mnumber \033[93mto edit \033[97mor \033[92m'add' \033[93mto add a new port:\033[0m ").strip().lower()
+    choice = input("\n\033[93mEnter the \033[92mnumber \033[93mto edit \033[97mor 'add' \033[92m to add a new port\033[97m:\033[0m ").strip().lower()
 
     if choice == 'add':
-        new_port = input("\033[93mEnter \033[92mnew port \033[97m(format: local_ip:local_port=remote_ip:remote_port):\033[0m ")
+        add_choice = input("\033[93m (1)\033[92m regular port \033[93m (2)\033[94m port range? \033[0m").strip()
+
+        if add_choice == '1':
+            print("\033[93m╭───────────────────────────────────────╮\033[0m")
+            print("1) \033[93mlocal_port=remote_port \033[97m(example: 4000=5000)")
+            print("2) \033[93mlocal_ip:local_port=remote_port \033[97m(example: 127.0.0.2:443=5201)")
+            print("3) \033[93mlocal_port=remote_ip:remote_port \033[97m(example: 443=1.1.1.1:5201)")
+            print("4) \033[93mlocal_ip:local_port=remote_ip:remote_port \033[97m(example: 127.0.0.2:443=1.1.1.1:5201)")
+            print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+            regular_format_choice = input("Enter choice: \033[0m").strip()
+
+            if regular_format_choice == '1':
+                local_port = input("\033[93mEnter local port: \033[0m").strip()
+                remote_port = input("\033[93mEnter remote port: \033[0m").strip()
+                new_port = f'{local_port}={remote_port}'
+            elif regular_format_choice == '2':
+                local_ip = input("\033[93mEnter local IP: \033[0m").strip()
+                local_port = input("\033[93mEnter local port: \033[0m").strip()
+                remote_port = input("\033[93mEnter remote port: \033[0m").strip()
+                new_port = f'{local_ip}:{local_port}={remote_port}'
+            elif regular_format_choice == '3':
+                local_port = input("\033[93mEnter local port: \033[0m").strip()
+                remote_ip = input("\033[93mEnter remote IP: \033[0m").strip()
+                remote_port = input("\033[93mEnter remote port: \033[0m").strip()
+                new_port = f'{local_port}={remote_ip}:{remote_port}'
+            elif regular_format_choice == '4':
+                local_ip = input("\033[93mEnter local IP: \033[0m").strip()
+                local_port = input("\033[93mEnter local port: \033[0m").strip()
+                remote_ip = input("\033[93mEnter remote IP: \033[0m").strip()
+                remote_port = input("\033[93mEnter remote port: \033[0m").strip()
+                new_port = f'{local_ip}:{local_port}={remote_ip}:{remote_port}'
+            else:
+                print("\033[91mInvalid choice!\033[0m")
+                return lines
+
+        elif add_choice == '2':
+            print("\033[93m╭───────────────────────────────────────╮\033[0m")
+            print("1)\033[93m port-range \033[97m(example: 443-600)")
+            print("2)\033[93m port-range:remote-port \033[97m(example: 443-600:5201)")
+            print("3)\033[93m port-range=remote_ip:remote-port \033[97m(example: 443-600=1.1.1.1:5201)")
+            print("\033[93m╰───────────────────────────────────────╯\033[0m")
+            
+            range_format_choice = input("Enter choice: \033[0m").strip()
+
+            if range_format_choice == '1':
+                port_range = input("\033[93mEnter \033[92mport range \033[93m(e.g., 500-600): \033[0m").strip()
+                new_port = f'{port_range}'
+            elif range_format_choice == '2':
+                port_range = input("\033[93mEnter \033[92mport range \033[93m(e.g., 500-600): \033[0m").strip()
+                forward_port = input("\033[93mEnter \033[92mremote port\033[93m: \033[0m").strip()
+                new_port = f'{port_range}:{forward_port}'
+            elif range_format_choice == '3':
+                port_range = input("\033[93mEnter \033[92mport range\033[93m (e.g., 500-600): \033[0m").strip()
+                remote_ip = input("\033[93mEnter \033[92mremote IP: \033[0m").strip()
+                forward_port = input("\033[93mEnter \033[92mremote port: \033[0m").strip()
+                new_port = f'{port_range}={remote_ip}:{forward_port}'
+            else:
+                print("\033[91mInvalid choice!\033[0m")
+                return lines
+
+        else:
+            print("\033[91mWrong choice, choose 1 or 2.\033[0m")
+            return lines
+
         ports.append(f'    "{new_port}",\n')
+
     else:
         index = int(choice) - 1
-        new_port = input(f"\033[93medit port \033[96m{ports[index].strip()}\033[97m (press Enter to keep it unchanged)\033[93m: \033[0m")
+        current_port = ports[index].strip()
+
+        if '-' in current_port or ':' in current_port:
+            new_port = input(f"\033[93mEdit port range \033[96m{current_port}\033[97m (press Enter to keep unchanged)\033[93m: \033[0m")
+        else:
+            new_port = input(f"\033[93mEdit regular port \033[96m{current_port}\033[97m (press Enter to keep unchanged)\033[93m: \033[0m")
+
         if new_port:
             ports[index] = f'    "{new_port}",\n'
 
     lines = lines[:ports_index_start + 1] + ports + lines[ports_index_end:]
 
     return lines
+
+
 
 def true_value(lines, key):
     for line in lines:
@@ -3471,23 +3759,18 @@ def service_status(service_name):
 def transport_method(config_file):
     try:
         with open(config_file, "r") as file:
-            transport = None
             for line in file:
                 line = line.strip()
 
-                if "accept_udp = true" in line:
-                    return "UDP"
-                
                 if line.startswith("transport"):
                     transport = line.split("=")[-1].strip().replace('"', '')
-
-            if transport:
-                return transport
+                    return transport
 
     except FileNotFoundError:
-        return "\033[91mNot found\033[0m"
+        return "\033[91mFile not found\033[0m"
     
-    return "\033[91mUnknown\033[0m"
+    return "\033[91mUnknown transport\033[0m"
+
 
 
 def service_logs(service_name):
@@ -3719,11 +4002,9 @@ def backhaul_iran_server_udpmenu_multic1():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [1]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -3732,44 +4013,76 @@ def backhaul_iran_server_udpmenu_multic1():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -3823,11 +4136,9 @@ def backhaul_iran_server_udpmenu_multic2():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [2]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -3836,44 +4147,76 @@ def backhaul_iran_server_udpmenu_multic2():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -3927,11 +4270,9 @@ def backhaul_iran_server_udpmenu_multic3():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [3]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -3940,44 +4281,76 @@ def backhaul_iran_server_udpmenu_multic3():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -4031,11 +4404,9 @@ def backhaul_iran_server_udpmenu_multic4():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [4]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -4044,44 +4415,76 @@ def backhaul_iran_server_udpmenu_multic4():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -4135,11 +4538,9 @@ def backhaul_iran_server_udpmenu_multic5():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [5]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -4148,44 +4549,76 @@ def backhaul_iran_server_udpmenu_multic5():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -4239,11 +4672,9 @@ def backhaul_iran_server_udpmenu_multic6():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [6]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -4252,44 +4683,76 @@ def backhaul_iran_server_udpmenu_multic6():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -4343,11 +4806,9 @@ def backhaul_iran_server_udpmenu_multic7():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [7]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -4356,44 +4817,76 @@ def backhaul_iran_server_udpmenu_multic7():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -4447,11 +4940,9 @@ def backhaul_iran_server_udpmenu_multic8():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [8]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -4460,44 +4951,76 @@ def backhaul_iran_server_udpmenu_multic8():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -4551,11 +5074,9 @@ def backhaul_iran_server_udpmenu_multic9():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [9]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -4564,44 +5085,76 @@ def backhaul_iran_server_udpmenu_multic9():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -4655,11 +5208,9 @@ def backhaul_iran_server_udpmenu_multic10():
 
     config = {
         "bind_addr": bind_addr,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [10]\033[93m: \033[0m").strip(),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "channel_size": int(input("\033[93mEnter the\033[92m channel size \033[97m(default 2048)\033[93m: \033[0m") or 2048),
         "heartbeat": int(input("\033[93mEnter the \033[92mheartbeat interval\033[97m (default 40)\033[93m: \033[0m") or 40),
         "sniffer": sniffer_enabled,
@@ -4668,44 +5219,76 @@ def backhaul_iran_server_udpmenu_multic10():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -4753,13 +5336,11 @@ def backhaul_kharej1_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [1]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client1.json",
@@ -4771,9 +5352,7 @@ def backhaul_kharej1_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -4809,13 +5388,11 @@ def backhaul_kharej2_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [2]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client2.json",
@@ -4827,9 +5404,7 @@ def backhaul_kharej2_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -4865,13 +5440,11 @@ def backhaul_kharej3_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [3]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client3.json",
@@ -4883,9 +5456,7 @@ def backhaul_kharej3_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -4921,13 +5492,11 @@ def backhaul_kharej4_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [4]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client4.json",
@@ -4939,9 +5508,7 @@ def backhaul_kharej4_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -4976,13 +5543,11 @@ def backhaul_kharej5_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [5]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client5.json",
@@ -4994,9 +5559,7 @@ def backhaul_kharej5_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -5032,13 +5595,11 @@ def backhaul_kharej6_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [6]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client6.json",
@@ -5050,9 +5611,7 @@ def backhaul_kharej6_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -5088,13 +5647,11 @@ def backhaul_kharej7_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [7]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client7.json",
@@ -5106,9 +5663,7 @@ def backhaul_kharej7_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -5143,13 +5698,11 @@ def backhaul_kharej8_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [8]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client8.json",
@@ -5161,9 +5714,7 @@ def backhaul_kharej8_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -5198,13 +5749,11 @@ def backhaul_kharej9_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [9]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client9.json",
@@ -5216,9 +5765,7 @@ def backhaul_kharej9_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -5253,13 +5800,11 @@ def backhaul_kharej10_client_udpmenu_multi():
 
     config = {
         "remote_addr": remote_addr_with_port,
-        "transport": "tcp",
-        "accept_udp": True,
+        "transport": "udp",
         "token": input("\033[93mEnter the \033[92mtoken \033[97mConfig [10]\033[93m: \033[0m").strip(),
         "connection_pool": int(input("\033[93mEnter the \033[92mconnection pool\033[97m (default 8)\033[93m: \033[0m") or 8),
         "keepalive_period": int(input("\033[93mEnter the \033[92mkeepalive period\033[97m (default 75)\033[93m: \033[0m") or 75),
         "dial_timeout": int(input("\033[93mEnter the \033[92mdial timeout\033[97m (default 10)\033[93m: \033[0m") or 10),
-        "nodelay": input("\033[93mEnable nodelay (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "retry_interval": int(input("\033[93mEnter the \033[92mretry interval\033[97m (default 3)\033[93m: \033[0m") or 3),
         "sniffer": input("\033[93mEnable sniffer (\033[92my\033[93m/\033[91mn\033[93m)? \033[0m").strip().lower() == "y",
         "sniffer_log": "/etc/backhaul_client10.json",
@@ -5271,9 +5816,7 @@ def backhaul_kharej10_client_udpmenu_multi():
     with open(config_path, 'w') as config_file:
         config_file.write("[client]\n")
         for key, value in config.items():
-            if key == "accept_udp":
-                config_file.write(f'#accept_udp = {"true" if value else "false"}\n')
-            elif isinstance(value, bool):
+            if isinstance(value, bool):
                 config_file.write(f'{key} = {"true" if value else "false"}\n')
             elif isinstance(value, int):
                 config_file.write(f'{key} = {value}\n')
@@ -5570,44 +6113,76 @@ def backhaul_iran_server_tcpmenu_multic1():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -5774,44 +6349,76 @@ def backhaul_iran_server_tcpmenu_multic2():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -5979,44 +6586,76 @@ def backhaul_iran_server_tcpmenu_multic3():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -6182,44 +6821,76 @@ def backhaul_iran_server_tcpmenu_multic4():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -6385,44 +7056,76 @@ def backhaul_iran_server_tcpmenu_multic5():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -6588,44 +7291,76 @@ def backhaul_iran_server_tcpmenu_multic6():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -6791,44 +7526,76 @@ def backhaul_iran_server_tcpmenu_multic7():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -6994,44 +7761,76 @@ def backhaul_iran_server_tcpmenu_multic8():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -7197,44 +7996,76 @@ def backhaul_iran_server_tcpmenu_multic9():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -7400,44 +8231,76 @@ def backhaul_iran_server_tcpmenu_multic10():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
     print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -9193,43 +10056,76 @@ def backhaul_iran_server_tcpmuxmenu_multic1():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [1]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 1]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -9299,43 +10195,76 @@ def backhaul_iran_server_tcpmuxmenu_multic2():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [2]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 2]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -9405,43 +10334,76 @@ def backhaul_iran_server_tcpmuxmenu_multic3():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [3]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 3]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -9511,43 +10473,76 @@ def backhaul_iran_server_tcpmuxmenu_multic4():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [4]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 4]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -9617,43 +10612,76 @@ def backhaul_iran_server_tcpmuxmenu_multic5():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [5]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 5]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -9723,43 +10751,76 @@ def backhaul_iran_server_tcpmuxmenu_multic6():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [6]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 6]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -9829,43 +10890,76 @@ def backhaul_iran_server_tcpmuxmenu_multic7():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [7]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 7]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -9935,43 +11029,76 @@ def backhaul_iran_server_tcpmuxmenu_multic8():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [8]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 8]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -10041,43 +11168,76 @@ def backhaul_iran_server_tcpmuxmenu_multic9():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [9]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 9]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -10147,43 +11307,76 @@ def backhaul_iran_server_tcpmuxmenu_multic10():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option Config [10]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m TCP forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? \033[97m[Config 10]:\033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -10951,43 +12144,76 @@ def backhaul_iran_server_wsmenu_multic1():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [1]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 1]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11052,43 +12278,76 @@ def backhaul_iran_server_wsmenu_multic2():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [2]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 2]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11153,43 +12412,76 @@ def backhaul_iran_server_wsmenu_multic3():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [3]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 3]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11254,43 +12546,76 @@ def backhaul_iran_server_wsmenu_multic4():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [4]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 4]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11355,43 +12680,76 @@ def backhaul_iran_server_wsmenu_multic5():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [5]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 5]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11456,43 +12814,76 @@ def backhaul_iran_server_wsmenu_multic6():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [6]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 6]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11557,43 +12948,76 @@ def backhaul_iran_server_wsmenu_multic7():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [7]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 7]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11658,43 +13082,76 @@ def backhaul_iran_server_wsmenu_multic8():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [8]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 8]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11759,43 +13216,76 @@ def backhaul_iran_server_wsmenu_multic9():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [9]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 9]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -11860,43 +13350,76 @@ def backhaul_iran_server_wsmenu_multic10():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [10]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 10]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -12628,43 +14151,76 @@ def backhaul_iran_server_wsmuxmenu_multic1():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [1]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 1]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -12734,43 +14290,76 @@ def backhaul_iran_server_wsmuxmenu_multic2():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [2]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 2]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -12840,43 +14429,76 @@ def backhaul_iran_server_wsmuxmenu_multic3():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [3]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 3]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -12946,43 +14568,76 @@ def backhaul_iran_server_wsmuxmenu_multic4():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [4]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 4]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -13052,43 +14707,76 @@ def backhaul_iran_server_wsmuxmenu_multic5():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [5]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 5]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -13158,43 +14846,76 @@ def backhaul_iran_server_wsmuxmenu_multic6():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [6]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 6]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -13264,43 +14985,76 @@ def backhaul_iran_server_wsmuxmenu_multic7():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [7]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 7]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -13370,43 +15124,76 @@ def backhaul_iran_server_wsmuxmenu_multic8():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [8]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 8]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -13476,43 +15263,76 @@ def backhaul_iran_server_wsmuxmenu_multic9():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [9]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 9]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -13582,43 +15402,76 @@ def backhaul_iran_server_wsmuxmenu_multic10():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [10]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 10]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -14393,43 +16246,76 @@ def backhaul_iran_server_wssmenu_multic1():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [1]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 1]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -14500,43 +16386,76 @@ def backhaul_iran_server_wssmenu_multic2():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [2]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 2]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -14607,43 +16526,76 @@ def backhaul_iran_server_wssmenu_multic3():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [3]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 3]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -14714,43 +16666,76 @@ def backhaul_iran_server_wssmenu_multic4():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [4]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 4]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -14821,43 +16806,76 @@ def backhaul_iran_server_wssmenu_multic5():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [5]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 5]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -14928,43 +16946,76 @@ def backhaul_iran_server_wssmenu_multic6():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [6]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 6]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -15035,43 +17086,76 @@ def backhaul_iran_server_wssmenu_multic7():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [7]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 7]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -15142,43 +17226,76 @@ def backhaul_iran_server_wssmenu_multic8():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [8]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 8]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -15249,43 +17366,76 @@ def backhaul_iran_server_wssmenu_multic9():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [9]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 9]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -15356,43 +17506,76 @@ def backhaul_iran_server_wssmenu_multic10():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward \033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [10]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 10]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -16131,43 +18314,76 @@ def backhaul_iran_server_wssmuxmenu_multic1():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [1]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 1]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 1]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [1]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -16243,43 +18459,76 @@ def backhaul_iran_server_wssmuxmenu_multic2():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [2]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 2]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 2]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [2]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -16355,43 +18604,76 @@ def backhaul_iran_server_wssmuxmenu_multic3():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [3]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 3]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 3]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [3]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -16467,43 +18749,76 @@ def backhaul_iran_server_wssmuxmenu_multic4():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [4]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 4]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 4]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [4]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -16579,43 +18894,76 @@ def backhaul_iran_server_wssmuxmenu_multic5():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [5]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 5]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 5]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [5]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -16691,43 +19039,76 @@ def backhaul_iran_server_wssmuxmenu_multic6():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [6]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 6]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 6]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [6]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -16803,43 +19184,76 @@ def backhaul_iran_server_wssmuxmenu_multic7():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [7]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 7]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 7]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [7]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -16915,43 +19329,76 @@ def backhaul_iran_server_wssmuxmenu_multic8():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [8]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 8]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 8]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [8]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -17027,43 +19474,76 @@ def backhaul_iran_server_wssmuxmenu_multic9():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [9]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 9]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 9]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [9]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
@@ -17139,43 +19619,76 @@ def backhaul_iran_server_wssmuxmenu_multic10():
         "log_level": "info",
     }
 
-    print("\033[92m ^ ^\033[0m")
-    print("\033[92m(\033[91mO,O\033[92m)\033[0m")
-    print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
-    print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
-    print("\033[93mChoose \033[92mForward option \033[97mConfig [10]:\033[0m")
+    print("\033[93mChoose \033[92mForward Type:\033[0m")
     print("\033[93m╭───────────────────────────────────────╮\033[0m")
-    print("1)\033[92m Port forward\033[0m")
-    print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
-    print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
-    print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+    print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+    print("1)\033[92m Regular Port Forward\033[0m")
+    print("2)\033[92m Port Range Forward\033[0m")
     print("\033[93m╰───────────────────────────────────────╯\033[0m")
     
-    ports = []
-    choice = int(input("Choose an option (1-4): "))
+    forward_type = int(input("Choose a forward type (1-2): "))
 
-    count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward? [\033[97mConfig 10]: \033[0m"))
-    for i in range(1, count + 1):
-        if choice == 1:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
-            ports.append(f"{local_port}={remote_port}")
-        elif choice == 2:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_port}")
-        elif choice == 3:
-            local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
-            ports.append(f"{local_port}={remote_ip}:{remote_port}")
-        elif choice == 4:
-            local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
-            local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
-            remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
-            remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
-            ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+    ports = []
+    if forward_type == 1:
+        print("\033[92m ^ ^\033[0m")
+        print("\033[92m(\033[91mO,O\033[92m)\033[0m")
+        print("\033[92m(   ) \033[92mPort Forward\033[93m Menu\033[0m")
+        print('\033[92m "-"\033[93m══════════════════════════════════════════════\033[0m')
+        print("\033[93mChoose \033[92mForward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m TCP forward\033[0m")
+        print("2)\033[93m Forward from \033[97mspecific \033[96mlocal IP\033[0m")
+        print("3)\033[93m Forward to a \033[97mspecific \033[96mremote IP\033[0m")
+        print("4)\033[93m Forward from \033[97mspecific \033[92mlocal IP \033[93mto a \033[96mremote IP\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+        
+        choice = int(input("Choose an option (1-4): "))
+
+        count = int(input("\033[93mHow \033[92mmany ports \033[93mdo you want to forward \033[97m[Config 10]:\033[93m? \033[0m"))
+        for i in range(1, count + 1):
+            if choice == 1:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m: \033[0m")
+                ports.append(f"{local_port}={remote_port}")
+            elif choice == 2:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP\033[96m {i}\033[93m:  \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_port}")
+            elif choice == 3:
+                local_port = input(f"\033[93mEnter \033[92mlocal port\033[96m {i}\033[93m:  \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP\033[96m {i}\033[93m:  \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port\033[96m {i}\033[93m:  \033[0m")
+                ports.append(f"{local_port}={remote_ip}:{remote_port}")
+            elif choice == 4:
+                local_ip = input(f"\033[93mEnter \033[92mlocal IP \033[96m{i}\033[93m: \033[0m")
+                local_port = input(f"\033[93mEnter \033[92mlocal port \033[96m{i}\033[93m: \033[0m")
+                remote_ip = input(f"\033[93mEnter \033[92mremote IP \033[96m{i}\033[93m: \033[0m")
+                remote_port = input(f"\033[93mEnter \033[92mremote port \033[96m{i}\033[93m: \033[0m")
+                ports.append(f"{local_ip}:{local_port}={remote_ip}:{remote_port}")
+
+    elif forward_type == 2:
+        print("\033[93mChoose \033[92mPort Range Forward option:\033[0m")
+        print("\033[93m╭───────────────────────────────────────╮\033[0m")
+        print("\033[97mThis is \033[92mConfig [10]\033[97m:\033[0m")
+        print("1)\033[92m Listen on all ports in the range\033[0m")
+        print("2)\033[93m Forward traffic to a specific port\033[0m")
+        print("3)\033[94m Forward traffic to a specific IP and port\033[0m")
+        print("\033[93m╰───────────────────────────────────────╯\033[0m")
+
+        range_choice = int(input("Choose an option (1-3): "))
+        port_range = input("\033[93mEnter \033[92mport range \033[97m(e.g: 100-900)\033[93m: \033[0m")
+        
+        if range_choice == 1:
+            ports.append(f"{port_range}")
+        elif range_choice == 2:
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}:{forward_port}")
+        elif range_choice == 3:
+            forward_ip = input(f"\033[93mEnter \033[92mRemote IP\033[93m: \033[0m")
+            forward_port = input(f"\033[93mEnter \033[92mRemote port\033[93m: \033[0m")
+            ports.append(f"{port_range}={forward_ip}:{forward_port}")
 
     config["ports"] = ports
 
