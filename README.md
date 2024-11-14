@@ -6,7 +6,7 @@
 
 **ده سرور ایران و یک کلاینت خارج اضافه شد**
 
-**مشکل ipv6 حل شد و aggressive pool هم اضافه شد**
+**مشکل ipv6 حل شد و aggressive pool هم اضافه شد**( از داخل edit هم میتوانید از ایپی 4 به 6 یا برعکس تغییر بدهید)
 
 ![check](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/13de8d36-dcfe-498b-9d99-440049c0cf14)
 **امکانات**(نسخه v0.6.3)
